@@ -1,0 +1,57 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<!-- Container for the main deck list view -->
+<div id="deck-list-view" class="max-w-6xl mx-auto">
+
+    <!-- Header and Create Button -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold">My Dashboard</h2>
+        <button id="show-create-deck-modal" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+            <i class="fas fa-plus mr-2"></i>Create New Deck
+        </button>
+    </div>
+
+    <!-- Deck List -->
+    <div id="deck-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p id="loading-decks" class="col-span-full">Loading decks...</p>
+    </div>
+</div>
+
+<!-- NEW: Container for the deck detail view (hidden by default) -->
+<div id="deck-detail-view" class="max-w-4xl mx-auto hidden">
+    <!-- Content will be loaded here by jQuery -->
+</div>
+<div id="study-view" class="max-w-2xl mx-auto hidden">
+    <!-- Study session content will be loaded here by jQuery -->
+</div>
+<!-- Modal for Creating a New Deck (No changes here) -->
+<div id="create-deck-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <h3 class="text-2xl font-semibold mb-4">Create a New Deck</h3>
+        <form id="create-deck-form" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="deck-name" class="block text-sm font-medium text-gray-700">Deck Name</label>
+                <input type="text" id="deck-name" placeholder="e.g., Spanish Vocabulary" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"/>
+            </div>
+            <div>
+                <label for="deck-description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="deck-description" placeholder="A brief summary of this deck" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <div>
+                <label for="deck-activity-type" class="block text-sm font-medium text-gray-700">Deck Type</label>
+                <select id="deck-activity-type" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <option value="FLASHCARDS">Flashcards</option>
+                    <option value="QUIZ">Quiz</option>
+                    <option value="SURVEY">Survey</option>
+                </select>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" id="cancel-create-deck" class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300">Cancel</button>
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">Create Deck</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
