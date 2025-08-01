@@ -129,6 +129,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 CORS_ALLOW_ALL_ORIGINS = True
 LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_URL = '/signin/'
 
 # Add the ASGI setting for Django Channels (which we will use in a later phase)
 ASGI_APPLICATION = 'flashcard_project.asgi.application'

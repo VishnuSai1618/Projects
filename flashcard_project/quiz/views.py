@@ -8,6 +8,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout
 from .forms import CustomUserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 from .models import Deck, Question, Choice
 from .serializers import DeckSerializer, QuestionSerializer, ChoiceSerializer
