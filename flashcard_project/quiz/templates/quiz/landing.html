@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memrace | Intelligent Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animated Background Lines Effect */
+        .background-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #020617; /* bg-slate-950 */
+            background-image: linear-gradient(white 0.5px, transparent 0.5px),
+                              linear-gradient(90deg, white 0.5px, transparent 0.5px);
+            background-size: 3rem 3rem;
+            animation: move-lines 15s linear infinite;
+            mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 40%, transparent 100%);
+            z-index: 0;
+        }
+
+        @keyframes move-lines {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -3rem 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950">
+    <div class="relative w-full min-h-screen overflow-hidden flex flex-col">
+        <!-- Animated background -->
+        <div class="background-lines"></div>
+        <div class="flex items-center space-x-4">
+    <!-- UPDATE THIS LINE -->
+    <a href="{% url 'signin' %}" class="text-neutral-300 hover:text-white">Sign In</a>
+    <a href="{% url 'signup' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-blue-700 transition-colors">Sign Up</a>
+</div>
+
+        <!-- Main Content Container -->
+        <div class="relative z-10 px-4 sm:px-6 lg:px-8 flex flex-col flex-grow">
+            <!-- Header Navigation -->
+            <header class="max-w-7xl mx-auto py-6 w-full">
+                <nav class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+    <a href="/admin/login/" class="text-neutral-300 hover:text-white">Sign In</a>
+    <!-- UPDATE THIS LINE -->
+    <a href="{% url 'signup' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-blue-700 transition-colors">Sign Up</a>
+</div>
+
+                    <a href="/" class="flex items-center space-x-2">
+                        <!-- Memrace Logo SVG -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-500">
+                            <path d="M9 8C10.6569 8 12 6.65685 12 5C12 3.34315 10.6569 2 9 2C7.34315 2 6 3.34315 6 5C6 6.65685 7.34315 8 9 8Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M18.5 4H15.5C14.3954 4 13.5 4.89543 13.5 6V10C13.5 11.1046 14.3954 12 15.5 12H18.5C19.6046 12 20.5 11.1046 20.5 10V6C20.5 4.89543 19.6046 4 18.5 4Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M3.5 14.5C3.5 13.3954 4.39543 12.5 5.5 12.5H12.5C13.6046 12.5 14.5 13.3954 14.5 14.5V21.5C14.5 22.0523 14.0523 22.5 13.5 22.5H6.5C4.84315 22.5 3.5 21.1569 3.5 19.5V14.5Z" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span class="font-extrabold text-2xl text-white">MEMRACE</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#" class="text-neutral-300 hover:text-white">Courses</a>
+                        <a href="#" class="text-neutral-300 hover:text-white">Quizzes</a>
+                        <a href="#" class="text-neutral-300 hover:text-white">About</a>
+                        <a href="#" class="text-neutral-300 hover:text-white">Support</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="/admin/login/" class="text-neutral-300 hover:text-white">Sign In</a>
+                        <a href="/admin/login/" class="bg-blue-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-blue-700 transition-colors">Sign Up</a>
+                    </div>
+                </nav>
+            </header>
+
+            <!-- Hero Section -->
+            <main class="max-w-7xl mx-auto flex-grow flex flex-col items-center justify-center text-center">
+                <h1 class="bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600 text-4xl md:text-5xl lg:text-7xl font-sans font-bold tracking-tight">
+                    Train Your Memory. <br /> Race to Learn.
+                </h1>
+                <p class="mt-6 max-w-xl mx-auto text-lg text-neutral-400">
+                    Boost your memory with flashcards, quizzes, and smart repetition. MEMRACE turns study time into game time — faster, smarter, and more fun.
+                </p>
+                <a href="{% url 'dashboard' %}" class="inline-block mt-10 px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-transform hover:scale-105">
+                    Get Started
+                </a>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
