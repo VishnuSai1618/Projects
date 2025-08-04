@@ -1,15 +1,69 @@
 {% extends 'quiz/base.html' %}
 
-{% block content %}
-<div class="relative w-full min-h-screen overflow-hidden flex items-center justify-center -mt-24">
-    <!-- Animated background (same as landing page) -->
-    <div class="background-lines" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;"></div>
+{% block head_extra %}
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #020617; /* bg-slate-950 */
+    }
+    .background-lines {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #020617;
+        background-image: linear-gradient(white 0.5px, transparent 0.5px),
+                            linear-gradient(90deg, white 0.5px, transparent 0.5px);
+        background-size: 3rem 3rem;
+        animation: move-lines 15s linear infinite;
+        mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 40%, transparent 100%);
+        z-index: 0;
+    }
+    @keyframes move-lines {
+        0% { background-position: 0 0; }
+        100% { background-position: -3rem 0; }
+    }
+    .form-input {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(71, 85, 105, 0.5);
+        transition: all 0.3s ease;
+    }
+    .form-input:focus {
+        background: rgba(30, 41, 59, 0.9);
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    .gradient-text {
+        background: linear-gradient(to bottom, #e2e8f0, #64748b);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    }
+    .glass-card {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(71, 85, 105, 0.2);
+    }
+    /* Hide the nav from base.html */
+    body > nav {
+        display: none;
+    }
+</style>
+{% endblock %}
 
-    <!-- Main Content Container -->
-    <div class="relative z-10 w-full max-w-md px-4">
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-lg shadow-2xl">
-            <div class="text-center mb-8">
-                <a href="/" class="flex items-center justify-center space-x-2">
+{% block content %}
+<div class="relative w-full min-h-screen overflow-hidden flex flex-col">
+    <div class="background-lines"></div>
+
+    <div class="relative z-10 px-4 sm:px-6 lg:px-8 flex flex-col flex-grow">
+        <header class="max-w-7xl mx-auto py-6 w-full">
+            <nav class="flex justify-between items-center">
+                <a href="/" class="flex items-center space-x-2">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-blue-500">
                         <path d="M9 8C10.6569 8 12 6.65685 12 5C12 3.34315 10.6569 2 9 2C7.34315 2 6 3.34315 6 5C6 6.65685 7.34315 8 9 8Z" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M18.5 4H15.5C14.3954 4 13.5 4.89543 13.5 6V10C13.5 11.1046 14.3954 12 15.5 12H18.5C19.6046 12 20.5 11.1046 20.5 10V6C20.5 4.89543 19.6046 4 18.5 4Z" stroke="currentColor" stroke-width="1.5"/>
@@ -17,38 +71,111 @@
                     </svg>
                     <span class="font-extrabold text-2xl text-white">MEMRACE</span>
                 </a>
-                <h2 class="mt-4 text-2xl font-bold text-white">Sign in to your account</h2>
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'signup' %}" class="text-neutral-300 hover:text-white transition-colors">Don't have an account? <span class="text-blue-400 hover:text-blue-300">Sign Up</span></a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="flex-grow flex items-center justify-center py-12">
+            <div class="max-w-md w-full">
+                <div class="text-center mb-8">
+                    <h1 class="gradient-text text-3xl md:text-4xl font-bold mb-4">Welcome Back</h1>
+                    <p class="text-neutral-400 text-lg">Sign in to continue your learning journey</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 shadow-2xl">
+                    <form method="post" class="space-y-6">
+                        {% csrf_token %}
+
+                        <!-- Username/Email Field -->
+                        <div>
+                            <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-neutral-300 mb-2">
+                                {{ form.username.label }}
+                            </label>
+                            <input
+                                type="{{ form.username.field.widget.input_type }}"
+                                name="{{ form.username.name }}"
+                                id="{{ form.username.id_for_label }}"
+                                class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-neutral-500 focus:outline-none"
+                                placeholder="Enter your username or email"
+                                required
+                                {% if form.username.value %}value="{{ form.username.value }}"{% endif %}
+                            >
+                            {% for error in form.username.errors %}
+                                <p class="mt-2 text-xs text-red-400">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Password Field -->
+                        <div>
+                            <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-neutral-300 mb-2">
+                                {{ form.password.label }}
+                            </label>
+                            <div class="relative">
+                                <input
+                                    type="password"
+                                    name="{{ form.password.name }}"
+                                    id="{{ form.password.id_for_label }}"
+                                    class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-neutral-500 focus:outline-none pr-12"
+                                    placeholder="Enter your password"
+                                    required
+                                >
+                                <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-white">
+                                    <svg id="eyeOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    <svg id="eyeClosed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            {% for error in form.password.errors %}
+                                <p class="mt-2 text-xs text-red-400">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Forgot Password -->
+                        <div class="text-right">
+                            <a href="#" class="text-sm text-blue-400 hover:text-blue-300">
+                                Forgot your password?
+                            </a>
+                        </div>
+
+                        <!-- Display Form Errors -->
+                        {% if form.non_field_errors %}
+                            <div class="p-3 bg-red-900/50 border border-red-500/50 rounded-lg text-red-300 text-sm">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50">
+                            Sign In
+                        </button>
+                    </form>
+                </div>
             </div>
-            
-            <form method="post" class="space-y-6">
-                {% csrf_token %}
-                
-                {% for field in form %}
-                <div>
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-neutral-300">{{ field.label }}</label>
-                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" 
-                           class="mt-1 block w-full bg-slate-800 border border-slate-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           required>
-                    {% for error in field.errors %}
-                    <p class="mt-2 text-xs text-red-500">{{ error }}</p>
-                    {% endfor %}
-                </div>
-                {% endfor %}
-
-                <div>
-                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Sign In
-                    </button>
-                </div>
-            </form>
-
-            <p class="mt-6 text-center text-sm text-neutral-400">
-                Don't have an account? 
-                <a href="{% url 'signup' %}" class="font-medium text-blue-500 hover:text-blue-400">
-                    Sign Up
-                </a>
-            </p>
-        </div>
+        </main>
     </div>
+
+    <script>
+        // Password visibility toggle
+        const passwordInput = document.getElementById('{{ form.password.id_for_label }}');
+        const toggleButton = document.getElementById('togglePassword');
+
+        if (toggleButton && passwordInput) {
+            toggleButton.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                document.getElementById('eyeOpen').classList.toggle('hidden');
+                document.getElementById('eyeClosed').classList.toggle('hidden');
+            });
+        }
+    </script>
 </div>
 {% endblock %}
